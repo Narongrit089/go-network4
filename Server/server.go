@@ -40,8 +40,8 @@ func handleConnection(conn net.Conn) {
 				fmt.Println("Transfer Complete")
 			} else {
 				fmt.Println(err)
-				return
 			}
+			return
 		}
 		//write data to file
 		file.Write(buffer[:n])

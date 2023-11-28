@@ -6,30 +6,31 @@ import (
 	"io"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 // Function send file to server
 func sendFile(conn net.Conn, filePath string) {
-	defer conn.Close() //Close connection before exit
+	defer conn.Close() // Close connection before exit
 
-	//Open file to send
+	// Open file to send
 	file, err := os.Open(filePath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	defer file.Close() //Close file before exit
+	defer file.Close() // Close file before exit
 
-	//send file name to server
-	_, fileName := filePath.Split(filePath)
+	// Send file name to server
+	_, fileName := filepath.Split(filePath)
 
-	conn.Write([]byte(fileName)) //send file name to server
+	conn.Write([]byte(fileName)) // Send file name to server
 
-	//Create Buffer to read file
-	buffer := make([]byte, 1024) //buffer size 1024 byte
+	// Create Buffer to read file
+	buffer := make([]byte, 1024) // Buffer size 1024 bytes
 	for {
-		//Read file to buffer
+		// Read file to Buffer
 		n, err := file.Read(buffer)
 		if err != nil {
 			if err == io.EOF {
@@ -39,30 +40,28 @@ func sendFile(conn net.Conn, filePath string) {
 			}
 			return
 		}
-
-		//Send Buffer to serer
+		// Send Buffer to server
 		conn.Write(buffer[:n])
 	}
-
 }
 
 func main() {
-	//Connect to server
+	// Connect to server
 	conn, err := net.Dial("tcp", "localhost:5000")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	defer conn.Close() //Close connection before exit
-	//Print message connect success
+	defer conn.Close() // Close connection before exit
+	// Print message connect success
 	fmt.Println("Connect to server success")
 
 	reader := bufio.NewReader(os.Stdin)
-	//Get File Path and file Name from user
+	// Get File Path and file name from user
 	fmt.Print("Enter file path+name: ")
 	filePath, _ := reader.ReadString('\n')
 	filePath = strings.TrimSpace(filePath)
 
+	// Send file to server
 	sendFile(conn, filePath)
 }
