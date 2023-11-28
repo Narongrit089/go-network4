@@ -51,7 +51,7 @@ func handleConnection(conn net.Conn) {
 
 func main() {
 	//Create Listener
-	listener, err := net.Listen("tcp", ":5000")
+	listener, err := net.Listen("tcp", "0.0.0.0:5000")
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -47,7 +47,7 @@ func sendFile(conn net.Conn, filePath string) {
 
 func main() {
 	// Connect to server
-	conn, err := net.Dial("tcp", "localhost:5000")
+	conn, err := net.Dial("tcp", "10.1.163.41:5000")
 	if err != nil {
 		fmt.Println(err)
 		return
